@@ -20,7 +20,7 @@
 
   <div id="formulario">
     <div class="item">
-      <label>Café/tralhas (R$/dia)</label>
+      <label>Café/bugigangas  (R$/dia)</label>
       <input id="cafe" type="number" min="0" step="0.5" value="8">
     </div>
     <div class="item">
@@ -56,7 +56,7 @@
   <canvas id="shareCanvas" width="600" height="600" style="display:none"></canvas>
 
   <footer style="margin-top:40px;font-size:12px;text-align:center;opacity:.7">
-    Análise criada por <strong>Evandro – @evandro.financas</strong>
+    Análise criada por <strong>Evandro – @evandro_planejadorfinanceiro</strong>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
@@ -90,7 +90,7 @@
       ctx.font = '28px sans-serif';
       ctx.fillText('por mês!',300,350);
       ctx.font = '24px sans-serif';
-      ctx.fillText('@evandro.financas',300,480);
+      ctx.fillText('@evandro_planejadorfinanceiro',300,480);
       canvas.toBlob(function(blob){
         const item = new ClipboardItem({'image/png':blob});
         navigator.clipboard.write([item]);
