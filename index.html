@@ -1,190 +1,111 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Detector de Gastos – Evandro</title>
   <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: #f5f7fa;
-      color: #333;
-      padding: 20px;
-      max-width: 600px;
-      margin: auto;
-    }
-    h2 { color: #111; text-align: center; }
-    .item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin: 10px 0;
-    }
-    label { flex: 1; }
-    input[type=number] {
-      width: 100px;
-      padding: 4px;
-      text-align: right;
-    }
-    button {
-      background: #111;
-      color: #fff;
-      border: none;
-      padding: 12px 24px;
-      border-radius: 4px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    #resultado {
-      background: #fff;
-      padding: 15px;
-      border-radius: 8px;
-      margin-top: 20px;
-    }
-    #topCanvas {
-      display: block;
-      margin: 0 auto 10px;
-    }
-    footer {
-      text-align: center;
-      margin-top: 30px;
-      font-size: 14px;
-      color: #666;
-    }
+    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:#f5f7fa;color:#333;padding:20px;max-width:600px;margin:auto;text-align:center}
+    img{display:block;margin:0 auto 10px;width:120px}
+    h1{margin:10px 0 0;font-size:28px}
+    .item{display:flex;align-items:center;justify-content:space-between;margin:10px 0}
+    label{flex:1}
+    input[type=number]{width:80px;padding:4px;text-align:right}
+    button{background:#111;color:#fff;border:none;padding:12px 24px;border-radius:4px;font-size:16px;cursor:pointer;margin-top:10px}
+    #resultado{background:#fff;padding:15px;border-radius:8px;margin-top:20px;text-align:left}
+    #shareCanvas{border:1px solid #ddd;margin-top:15px;border-radius:8px}
+    footer{margin-top:40px;font-size:12px;opacity:.7}
   </style>
 </head>
 <body>
 
-<canvas id="topCanvas" width="600" height="180"></canvas>
+  <!-- Detetive visível -->
+  <img src="https://i.imgur.com/7v4pXb4.png" alt="Detetive">
 
-<div id="inputs"></div>
-<button onclick="calcular()">Ver resultado</button>
-<div id="resultado"></div>
+  <h1>Detector de Gastos</h1>
+  <p style="font-size:18px;margin:0 0 20px"><strong>Evandro – Planejador Financeiro</strong></p>
 
-<footer>Evandro – Planejador Financeiro</footer>
+  <div class="item">
+    <label>☕ Café (R$/dia)</label>
+    <input id="cafe" type="number" min="0" step="0.5" value="8"> <span>R$</span>
+  </div>
+  <div class="item">
+    <label>🍔 Delivery refeições (R$/semana)</label>
+    <input id="deli" type="number" min="0" step="1" value="60"> <span>R$</span>
+  </div>
+  <div class="item">
+    <label>🚗 Estacionamento extra (R$/semana)</label>
+    <input id="est" type="number" min="0" step="1" value="40"> <span>R$</span>
+  </div>
+  <div class="item">
+    <label>📺 Assinaturas esquecidas (R$/mês)</label>
+    <input id="assi" type="number" min="0" step="1" value="35"> <span>R$</span>
+  </div>
+  <div class="item">
+    <label>📱 Apps extras (R$/mês)</label>
+    <input id="apps" type="number" min="0" step="1" value="20"> <span>R$</span>
+  </div>
+  <div class="item">
+    <label>🚘 Carona/uber extra (R$/semana)</label>
+    <input id="uber" type="number" min="0" step="1" value="30"> <span>R$</span>
+  </div>
 
-<script>
-  const canvas = document.getElementById("topCanvas");
-  const ctx = canvas.getContext("2d");
+  <!-- botão SEM a palavra resgate -->
+  <button onclick="calcular()">Ver resultado</button>
 
-  // fundo
-  ctx.fillStyle = "#ffffff";
-  ctx.fillRect(0, 0, 600, 180);
+  <div id="resultado" style="display:none">
+    <h2>💰 Seu potencial por mês</h2>
+    <p><strong id="total"></strong></p>
+    <p>Se investir 100% disso a <strong>1% a.m.</strong> terá cerca de <strong id="futuro"></strong> em 1 ano.</p>
+    <button onclick="compartilhar()">📲 Copiar imagem para stories</button>
+  </div>
 
-  // desenho estilo detetive (vetor simples)
-  ctx.strokeStyle = "#111";
-  ctx.lineWidth = 4;
+  <canvas id="shareCanvas" width="600" height="600" style="display:none"></canvas>
 
-  // chapéu
-  ctx.beginPath();
-  ctx.ellipse(300, 50, 45, 15, 0, 0, Math.PI * 2);
-  ctx.fillStyle = "#111";
-  ctx.fill();
+  <footer>
+    Criado por <strong>Evandro – @evandro_planejadorfinanceiro</strong>
+  </footer>
 
-  // cabeça
-  ctx.beginPath();
-  ctx.arc(300, 95, 35, 0, Math.PI * 2);
-  ctx.stroke();
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script>
+    function calcular(){
+      const cafe  = parseFloat(document.getElementById('cafe').value) * 22;
+      const deli  = parseFloat(document.getElementById('deli').value) * 4;
+      const est   = parseFloat(document.getElementById('est').value) * 4;
+      const assi  = parseFloat(document.getElementById('assi').value);
+      const apps  = parseFloat(document.getElementById('apps').value);
+      const uber  = parseFloat(document.getElementById('uber').value) * 4;
+      const total = cafe + deli + est + assi + apps + uber;
+      document.getElementById('total').innerText   = `R$ ${total.toFixed(2)} por mês`;
+      document.getElementById('futuro').innerText  = `R$ ${(total*12*1.1268).toFixed(0)}`;
+      document.getElementById('resultado').style.display = 'block';
+      window.totalValor = total.toFixed(0);
+    }
 
-  // olhos
-  ctx.beginPath();
-  ctx.arc(285, 90, 4, 0, Math.PI * 2);
-  ctx.arc(315, 90, 4, 0, Math.PI * 2);
-  ctx.fillStyle = "#111";
-  ctx.fill();
+    function compartilhar(){
+      const canvas = document.getElementById('shareCanvas');
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#111';
+      ctx.fillRect(0,0,600,600);
+      ctx.fillStyle = '#fff';
+      ctx.textAlign = 'center';
+      ctx.font = 'bold 48px sans-serif';
+      ctx.fillText('DETECTOR DE GASTOS',300,120);
+      ctx.font = '30px sans-serif';
+      ctx.fillText('Você pode economizar:',300,200);
+      ctx.font = 'bold 80px sans-serif';
+      ctx.fillText('R$ '+window.totalValor,300,300);
+      ctx.font = '28px sans-serif';
+      ctx.fillText('por mês!',300,350);
+      ctx.font = '24px sans-serif';
+      ctx.fillText('@evandro_planejadorfinanceiro',300,480);
 
-  // nariz
-  ctx.beginPath();
-  ctx.moveTo(300, 98);
-  ctx.lineTo(300, 108);
-  ctx.stroke();
-
-  // bigode
-  ctx.beginPath();
-  ctx.moveTo(280, 110);
-  ctx.quadraticCurveTo(300, 120, 320, 110);
-  ctx.stroke();
-
-  // lupa
-  ctx.beginPath();
-  ctx.arc(340, 125, 18, 0, Math.PI * 2);
-  ctx.moveTo(355, 140);
-  ctx.lineTo(365, 150);
-  ctx.stroke();
-
-  // NOME grande e central
-  ctx.fillStyle = "#111";
-  ctx.font = "bold 36px sans-serif";
-  ctx.textAlign = "center";
-  ctx.fillText("Evandro – Planejador Financeiro", 300, 165);
-
-  const categorias = ["Café","Refeições fora","Delivery","Transporte","Assinaturas","Lanches","Beleza/barba","Presentes","Imprevistos","Outros"];
-  const container = document.getElementById("inputs");
-
-  categorias.forEach(c => {
-    const div = document.createElement("div");
-    div.className = "item";
-    div.innerHTML = `
-      <label>${c}</label>
-      <span>R$</span>
-      <input type="number" id="${c}" min="0" step="0.01" placeholder="0,00">
-    `;
-    container.appendChild(div);
-  });
-
-  function calcular() {
-    let total = 0, maiores = [];
-    categorias.forEach(c => {
-      const v = parseFloat(document.getElementById(c).value) || 0;
-      total += v;
-      maiores.push({ c, v });
-    });
-    maiores.sort((a, b) => b.v - a.v);
-
-    const semana = total * 7;
-    const mes = total * 30;
-    const ano = total * 365;
-
-    document.getElementById("resultado").innerHTML = `
-      <h2>Resumo dos gastos</h2>
-      <p><strong>Gasto por dia:</strong> R$ ${total.toFixed(2)}</p>
-      <p><strong>7 dias:</strong> R$ ${semana.toFixed(2)}</p>
-      <p><strong>30 dias:</strong> R$ ${mes.toFixed(2)}</p>
-      <p><strong>365 dias:</strong> R$ ${ano.toFixed(2)}</p>
-      <p><strong>Maior gasto:</strong> ${maiores[0].c} – R$ ${maiores[0].v.toFixed(2)}</p>
-      <button onclick="gerarImagem()">Gerar imagem para stories</button>
-    `;
-  }
-
-  function gerarImagem() {
-    const c = document.createElement("canvas");
-    c.width = 600;
-    c.height = 400;
-    const x = c.getContext("2d");
-
-    x.fillStyle = "#111";
-    x.fillRect(0, 0, 600, 400);
-    x.fillStyle = "#fff";
-    x.font = "bold 28px sans-serif";
-    x.fillText("Detector de Gastos – Evandro", 40, 60);
-    x.font = "20px sans-serif";
-    let y = 120;
-    categorias.forEach(c => {
-      const v = parseFloat(document.getElementById(c).value) || 0;
-      x.fillText(`${c}: R$ ${v.toFixed(2)}`, 40, y);
-      y += 30;
-    });
-    const t = categorias.reduce((s, c) => s + (parseFloat(document.getElementById(c).value) || 0), 0);
-    x.fillStyle = "#ffcc00";
-    x.font = "bold 24px sans-serif";
-    x.fillText(`Total/dia: R$ ${t.toFixed(2)}`, 40, 360);
-
-    const link = document.createElement("a");
-    link.download = "detector-de-gastos.png";
-    link.href = c.toDataURL();
-    link.click();
-  }
-</script>
-
+      canvas.toBlob(function(blob){
+        const item = new ClipboardItem({'image/png':blob});
+        navigator.clipboard.write([item]);
+        alert('📸 Imagem copiada! Cole nos seus stories e me marque.');
+      });
+    }
+  </script>
 </body>
 </html>
