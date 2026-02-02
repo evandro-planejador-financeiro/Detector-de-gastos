@@ -35,13 +35,15 @@
 
   <script>
     const lista = [
-      {id:"cafe",  txt:"☕ Café",                    icone:"☕", tipo:"dia"},
-      {id:"fora",  txt:"🍽️ Refeições fora",        icone:"🍽️", tipo:"sem"},
-      {id:"deli",  txt:"🍔 Delivery",               icone:"🍔", tipo:"sem"},
-      {id:"assi",  txt:"📺 Assinaturas c/ pouco uso", icone:"📺", tipo:"mes"},
-      {id:"apps",  txt:"📱 Apps extras",            icone:"📱", tipo:"mes"},
-      {id:"presente",txt:"🎁 Presentes",            icone:"🎁", tipo:"mes"},
-      {id:"multa", txt:"🚦 Multas de trânsito",     icone:"🚦", tipo:"mes"}
+      {id:"cafe",  txt:"☕ Café <small>(por dia)</small>",                    icone:"☕", tipo:"dia"},
+      {id:"fora",  txt:"🍽️ Refeições fora <small>(por semana)</small>",      icone:"🍽️", tipo:"sem"},
+      {id:"deli",  txt:"🍔 Delivery <small>(por semana)</small>",            icone:"🍔", tipo:"sem"},
+      {id:"assi",  txt:"📺 Assinaturas c/ pouco uso <small>(por mês)</small>", icone:"📺", tipo:"mes"},
+      {id:"apps",  txt:"📱 Apps extras <small>(por mês)</small>",            icone:"📱", tipo:"mes"},
+      {id:"presente",txt:"🎁 Presentes <small>(por mês)</small>",            icone:"🎁", tipo:"mes"},
+      {id:"multa", txt:"🚦 Multas de trânsito <small>(por mês)</small>",     icone:"🚦", tipo:"mes"},
+      {id:"carro", txt:"🚗 Gastos com carro <small>(por mês)</small>",       icone:"🚗", tipo:"mes"},
+      {id:"beleza",txt:"✂️ Beleza/Barba <small>(por mês)</small>",           icone:"✂️", tipo:"mes"}
     ];
 
     const box = document.getElementById("inputs");
@@ -68,8 +70,8 @@
       document.getElementById("resultado").innerHTML = `
         <h2>Resumo dos gastos</h2>
         <p><strong>Total no mês:</strong> R$ ${total.toFixed(2)}</p>
-        <p><strong>Maior gasto:</strong> ${max.n} – R$ ${max.v.toFixed(2)}</p>
-        <button onclick="gerarImagem()">Gerar imagem para stories</button>
+        <p><strong>Maior gasto:</strong> ${max.n.replace(/<.*?>/g,"")} – R$ ${max.v.toFixed(2)}</p>
+        <button onclick="gerarImagem()">Gerar imagem</button>
       `;
     }
 
@@ -87,7 +89,7 @@
       lista.forEach(o=>{
         const v = parseFloat(document.getElementById(o.id).value)||0;
         const valor = o.tipo==="dia" ? v*30 : o.tipo==="sem" ? v*4 : v;
-        x.fillText(`${o.txt}: R$ ${valor.toFixed(2)}`,40,y);
+        x.fillText(`${o.txt.replace(/<.*?>/g,"")}: R$ ${valor.toFixed(2)}`,40,y);
         y+=30;
       });
       x.fillStyle = "#ffcc00";
