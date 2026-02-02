@@ -10,7 +10,9 @@
     #cab span:first-child{font-size:32px;font-weight:bold}
     #cab span:last-child{font-size:14px;color:#555}
     h1{margin:80px 0 10px;font-size:28px;text-align:center}
-    .item{display:flex;align-items:center;justify-content:space-between;margin:10px 0}
+    .item{display:flex;align-items:center;margin:12px 0}
+    .item label{flex:1}
+    .item span{margin-right:4px;font-weight:bold}
     input[type=number]{width:90px;padding:4px;text-align:right}
     button{background:#111;color:#fff;border:none;padding:12px 24px;border-radius:4px;font-size:16px;cursor:pointer}
     #resultado{background:#fff;padding:15px;border-radius:8px;margin-top:20px}
@@ -19,7 +21,6 @@
 </head>
 <body>
 
-  <!-- NOME NO TOPO-ESQUERDO -->
   <div id="cab">
     <span>Evandro</span><br>
     <span>Planejador Financeiro</span>
@@ -34,12 +35,13 @@
 
   <script>
     const lista = [
-      {id:"cafe",  txt:"☕ Café",              icone:"☕", tipo:"dia"},
-      {id:"deli",  txt:"🍔 Delivery",         icone:"🍔", tipo:"sem"},
-      {id:"est",   txt:"🚗 Estacionamento",   icone:"🚗", tipo:"sem"},
-      {id:"assi",  txt:"📺 Assinaturas",      icone:"📺", tipo:"mes"},
-      {id:"apps",  txt:"📱 Apps extras",      icone:"📱", tipo:"mes"},
-      {id:"uber",  txt:"🚘 Uber/Carona",     icone:"🚘", tipo:"sem"}
+      {id:"cafe",  txt:"☕ Café",                    icone:"☕", tipo:"dia"},
+      {id:"fora",  txt:"🍽️ Refeições fora",        icone:"🍽️", tipo:"sem"},
+      {id:"deli",  txt:"🍔 Delivery",               icone:"🍔", tipo:"sem"},
+      {id:"assi",  txt:"📺 Assinaturas c/ pouco uso", icone:"📺", tipo:"mes"},
+      {id:"apps",  txt:"📱 Apps extras",            icone:"📱", tipo:"mes"},
+      {id:"presente",txt:"🎁 Presentes",            icone:"🎁", tipo:"mes"},
+      {id:"multa", txt:"🚦 Multas de trânsito",     icone:"🚦", tipo:"mes"}
     ];
 
     const box = document.getElementById("inputs");
