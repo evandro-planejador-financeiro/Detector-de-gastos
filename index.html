@@ -1,1 +1,145 @@
-<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Detector de Gastos – Evandro</title><style>body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:#f5f7fa;color:#333;padding:20px;max-width:600px;margin:auto}h1,h2{color:#111}.item{display:flex;align-items:center;justify-content:space-between;margin:10px 0}input[type=number]{width:80px;padding:4px}button{background:#111;color:#fff;border:none;padding:12px 24px;border-radius:4px;font-size:16px;cursor:pointer}#resultado{background:#fff;padding:15px;border-radius:8px;margin-top:20px}#shareCanvas{border:1px solid #ddd;margin-top:15px;border-radius:8px}</style></head><body><h1>Detector de Gastos – 7 Dias</h1><p>Insira o valor que você gasta por dia em cada item:</p><div id="inputs"></div><button onclick="calcular()">Ver resultado</button><div id="resultado"></div><canvas id="shareCanvas" width="600" height="400" style="display:none;"></canvas><script>const categorias=["Café","Refeições fora","Delivery","Transporte","Assinaturas","Lanches","Beleza/barba","Presentes","Imprevistos","Outros"];const container=document.getElementById("inputs");categorias.forEach(c=>{const div=document.createElement("div");div.className="item";div.innerHTML=`<label>${c}</label><input type="number" id="${c}" min="0" step="0.01" placeholder="0,00">`;container.appendChild(div)});function calcular(){let t=0,m=[];categorias.forEach(c=>{const v=parseFloat(document.getElementById(c).value)||0;t+=v;m.push({c,v})});m.sort((a,b)=>b.v-a.v);const s=t*7,n=t*30,a=t*365;document.getElementById("resultado").innerHTML=`<h2>Resumo dos gastos</h2><p><strong>Gasto por dia:</strong> R$ ${t.toFixed(2)}</p><p><strong>7 dias:</strong> R$ ${s.toFixed(2)}</p><p><strong>30 dias:</strong> R$ ${n.toFixed(2)}</p><p><strong>365 dias:</strong> R$ ${a.toFixed(2)}</p><p><strong>Maior gasto:</strong> ${m[0].c} – R$ ${m[0].v.toFixed(2)}</p><button onclick="gerarImagem()">Gerar imagem para stories</button>`}function gerarImagem(){const c=document.getElementById("shareCanvas"),x=c.getContext("2d");c.style.display="block";x.fillStyle="#111";x.fillRect(0,0,600,400);x.fillStyle="#fff";x.font="bold 28px sans-serif";x.fillText("Detector de Gastos – Evandro",40,60);x.font="20px sans-serif";let y=120;categorias.forEach(c=>{const v=parseFloat(document.getElementById(c).value)||0;x.fillText(`${c}: R$ ${v.toFixed(2)}`,40,y);y+=30});const t=categorias.reduce((s,c)=>s+(parseFloat(document.getElementById(c).value)||0),0);x.fillStyle="#ffcc00";x.font="bold 24px sans-serif";x.fillText(`Total/dia: R$ ${t.toFixed(2)}`,40,360);alert("Imagem gerada! Toque e segure para salvar e postar nos stories.")}</script></body></html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Detector de Gastos – Evandro</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #f5f7fa;
+      color: #333;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+    h1, h2 { color: #111; text-align: center; }
+    .item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 10px 0;
+    }
+    label { flex: 1; }
+    input[type=number] {
+      width: 100px;
+      padding: 4px;
+      text-align: right;
+    }
+    button {
+      background: #111;
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #resultado {
+      background: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+    #shareCanvas {
+      border: 1px solid #ddd;
+      margin-top: 15px;
+      border-radius: 8px;
+    }
+    footer {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 14px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+
+  <img src="https://i.imgur.com/7v4pXb4.png" alt="Detetive" style="display:block;margin:0 auto 10px;width:120px;">
+
+  <h1>Detector de Gastos</h1>
+
+  <p>Insira o valor que você gasta por dia em cada item:</p>
+  <div id="inputs"></div>
+
+  <button onclick="calcular()">Ver resultado</button>
+
+  <div id="resultado"></div>
+  <canvas id="shareCanvas" width="600" height="400" style="display:none;"></canvas>
+
+  <footer>Evandro – Planejador Financeiro</footer>
+
+  <script>
+    const categorias = [
+      "Café", "Refeições fora", "Delivery", "Transporte",
+      "Assinaturas", "Lanches", "Beleza/barba", "Presentes",
+      "Imprevistos", "Outros"
+    ];
+    const container = document.getElementById("inputs");
+
+    categorias.forEach(c => {
+      const div = document.createElement("div");
+      div.className = "item";
+      div.innerHTML = `
+        <label>${c}</label>
+        <span>R$</span>
+        <input type="number" id="${c}" min="0" step="0.01" placeholder="0,00">
+      `;
+      container.appendChild(div);
+    });
+
+    function calcular() {
+      let total = 0, maiores = [];
+      categorias.forEach(c => {
+        const v = parseFloat(document.getElementById(c).value) || 0;
+        total += v;
+        maiores.push({ c, v });
+      });
+      maiores.sort((a, b) => b.v - a.v);
+
+      const semana = total * 7;
+      const mes   = total * 30;
+      const ano   = total * 365;
+
+      document.getElementById("resultado").innerHTML = `
+        <h2>Resumo dos gastos</h2>
+        <p><strong>Gasto por dia:</strong> R$ ${total.toFixed(2)}</p>
+        <p><strong>7 dias:</strong> R$ ${semana.toFixed(2)}</p>
+        <p><strong>30 dias:</strong> R$ ${mes.toFixed(2)}</p>
+        <p><strong>365 dias:</strong> R$ ${ano.toFixed(2)}</p>
+        <p><strong>Maior gasto:</strong> ${maiores[0].c} – R$ ${maiores[0].v.toFixed(2)}</p>
+        <button onclick="gerarImagem()">Gerar imagem para stories</button>
+      `;
+    }
+
+    function gerarImagem() {
+      const canvas = document.getElementById("shareCanvas");
+      const ctx = canvas.getContext("2d");
+      canvas.style.display = "block";
+
+      ctx.fillStyle = "#111";
+      ctx.fillRect(0, 0, 600, 400);
+      ctx.fillStyle = "#fff";
+      ctx.font = "bold 28px sans-serif";
+      ctx.fillText("Detector de Gastos", 40, 60);
+
+      ctx.font = "20px sans-serif";
+      let y = 120;
+      categorias.forEach(c => {
+        const v = parseFloat(document.getElementById(c).value) || 0;
+        ctx.fillText(`${c}: R$ ${v.toFixed(2)}`, 40, y);
+        y += 30;
+      });
+
+      const total = categorias.reduce((s, c) => s + (parseFloat(document.getElementById(c).value) || 0), 0);
+      ctx.fillStyle = "#ffcc00";
+      ctx.font = "bold 24px sans-serif";
+      ctx.fillText(`Total/dia: R$ ${total.toFixed(2)}`, 40, 360);
+
+      alert("Imagem gerada! Toque e segure para salvar e postar nos stories.");
+    }
+  </script>
+
+</body>
+</html>
