@@ -39,15 +39,15 @@
 
   <script>
     const lista = [
-      {id:"cafe",  txt:"☕ Café, snacks e lanches",                    icone:"☕", tipo:"dia"},
-      {id:"fora",  txt:"🍽️ Refeições fora",      icone:"🍽️", tipo:"sem"},
-      {id:"deli",  txt:"🍔 Delivery",            icone:"🍔", tipo:"sem"},
-      {id:"assi",  txt:"📺 Assinaturas esquecidas", icone:"📺", tipo:"mes"},
-      {id:"apps",  txt:"📱 Apps extras",            icone:"📱", tipo:"mes"},
-      {id:"presente",txt:"🛒 Compras on-line por impulso", icone:"🛒", tipo:"mes"},
-      {id:"multa", txt:"🚗 Uber para pequenos trajetos que podem ser evitados", icone:"🚗", tipo:"mes"},
-      {id:"carro", txt:"💳 Anuidade de cartão de crédito", icone:"💳", tipo:"mes"},
-      {id:"beleza",txt:"✂️ Beleza/Barba",           icone:"✂️", tipo:"mes"}
+      {id:"cafe",  txt:"☕ Café, snacks e lanches <small>(por dia)</small>",                    icone:"☕", tipo:"dia"},
+      {id:"fora",  txt:"🍽️ Refeições fora <small>(por semana)</small>",      icone:"🍽️", tipo:"sem"},
+      {id:"deli",  txt:"🍔 Delivery <small>(por semana)</small>",            icone:"🍔", tipo:"sem"},
+      {id:"assi",  txt:"📺 Assinaturas esquecidas <small>(por mês)</small>", icone:"📺", tipo:"mes"},
+      {id:"apps",  txt:"📱 Apps extras <small>(por mês)</small>",            icone:"📱", tipo:"mes"},
+      {id:"presente",txt:"🛒 Compras on-line por impulso <small>(por mês)</small>", icone:"🛒", tipo:"mes"},
+      {id:"multa", txt:"🚗 Uber para pequenos trajetos que podem ser evitados <small>(por mês)</small>", icone:"🚗", tipo:"mes"},
+      {id:"carro", txt:"💳 Anuidade de cartão de crédito <small>(por mês)</small>", icone:"💳", tipo:"mes"},
+      {id:"beleza",txt:"✂️ Beleza/Barba <small>(por mês)</small>",           icone:"✂️", tipo:"mes"}
     ];
 
     const box = document.getElementById("inputs");
@@ -93,7 +93,7 @@
       lista.forEach(o=>{
         const v = parseFloat(document.getElementById(o.id).value)||0;
         const valor = o.tipo==="dia" ? v*30 : o.tipo==="sem" ? v*4 : v;
-        x.fillText(`${o.txt}: R$ ${valor.toFixed(2)}`,40,y);
+        x.fillText(`${o.txt.replace(/<.*?>/g,"")}: R$ ${valor.toFixed(2)}`,40,y);
         y+=30;
       });
 
