@@ -28,7 +28,6 @@
 
   <h1>Detector de Gastos</h1>
 
-  <!-- TEXTO DE INSTRUÇÃO ADICIONADO AQUI -->
   <p style="margin:0 0 20px;font-size:15px;color:#555;text-align:center">
     Digite quanto você gasta com cada item e clique em <strong>Ver resultado</strong>.
   </p>
@@ -36,19 +35,19 @@
   <div id="inputs"></div>
   <button onclick="calcular()">Ver resultado</button>
   <div id="resultado"></div>
-  <canvas id="shareCanvas" width="600" height="400" style="display:none;"></canvas>
+  <canvas id="shareCanvas" width="600" height="450" style="display:none;"></canvas>
 
   <script>
     const lista = [
-      {id:"cafe",  txt:"☕ Café <small>(por dia)</small>",                    icone:"☕", tipo:"dia"},
-      {id:"fora",  txt:"🍽️ Refeições fora <small>(por semana)</small>",      icone:"🍽️", tipo:"sem"},
-      {id:"deli",  txt:"🍔 Delivery <small>(por semana)</small>",            icone:"🍔", tipo:"sem"},
-      {id:"assi",  txt:"📺 Assinaturas c/ pouco uso <small>(por mês)</small>", icone:"📺", tipo:"mes"},
-      {id:"apps",  txt:"📱 Apps extras <small>(por mês)</small>",            icone:"📱", tipo:"mes"},
-      {id:"presente",txt:"🎁 Presentes <small>(por mês)</small>",            icone:"🎁", tipo:"mes"},
-      {id:"multa", txt:"🚦 Multas de trânsito <small>(por mês)</small>",     icone:"🚦", tipo:"mes"},
-      {id:"carro", txt:"🚗 Gastos com carro <small>(por mês)</small>",       icone:"🚗", tipo:"mes"},
-      {id:"beleza",txt:"✂️ Beleza/Barba <small>(por mês)</small>",           icone:"✂️", tipo:"mes"}
+      {id:"cafe",  txt:"☕ Café, snacks e lanches",                    icone:"☕", tipo:"dia"},
+      {id:"fora",  txt:"🍽️ Refeições fora",      icone:"🍽️", tipo:"sem"},
+      {id:"deli",  txt:"🍔 Delivery",            icone:"🍔", tipo:"sem"},
+      {id:"assi",  txt:"📺 Assinaturas esquecidas", icone:"📺", tipo:"mes"},
+      {id:"apps",  txt:"📱 Apps extras",            icone:"📱", tipo:"mes"},
+      {id:"presente",txt:"🛒 Compras on-line por impulso", icone:"🛒", tipo:"mes"},
+      {id:"multa", txt:"🚗 Uber para pequenos trajetos que podem ser evitados", icone:"🚗", tipo:"mes"},
+      {id:"carro", txt:"💳 Anuidade de cartão de crédito", icone:"💳", tipo:"mes"},
+      {id:"beleza",txt:"✂️ Beleza/Barba",           icone:"✂️", tipo:"mes"}
     ];
 
     const box = document.getElementById("inputs");
@@ -64,18 +63,18 @@
     });
 
     function calcular(){
-      let total = 0, max = {v:0,n:""};
+      let totalMes = 0;
       lista.forEach(o=>{
         const v = parseFloat(document.getElementById(o.id).value)||0;
         const valor = o.tipo==="dia" ? v*30 : o.tipo==="sem" ? v*4 : v;
-        total += valor;
-        if(valor>max.v){max.v=valor;max.n=o.txt;}
+        totalMes += valor;
       });
+      const totalAno = totalMes * 12;
 
       document.getElementById("resultado").innerHTML = `
         <h2>Resumo dos gastos</h2>
-        <p><strong>Total no mês:</strong> R$ ${total.toFixed(2)}</p>
-        <p><strong>Maior gasto:</strong> ${max.n.replace(/<.*?>/g,"")} – R$ ${max.v.toFixed(2)}</p>
+        <p><strong>Total no mês:</strong> R$ ${totalMes.toFixed(2)}</p>
+        <p><strong>Valor total gasto no ano:</strong> R$ ${totalAno.toFixed(2)}</p>
         <button onclick="gerarImagem()">Gerar imagem</button>
       `;
     }
@@ -85,7 +84,7 @@
       const x = c.getContext("2d");
       c.style.display = "block";
       x.fillStyle = "#111";
-      x.fillRect(0,0,600,400);
+      x.fillRect(0,0,600,450);
       x.fillStyle = "#fff";
       x.font = "bold 28px sans-serif";
       x.fillText("Detector de Gastos – Evandro",40,60);
@@ -94,16 +93,21 @@
       lista.forEach(o=>{
         const v = parseFloat(document.getElementById(o.id).value)||0;
         const valor = o.tipo==="dia" ? v*30 : o.tipo==="sem" ? v*4 : v;
-        x.fillText(`${o.txt.replace(/<.*?>/g,"")}: R$ ${valor.toFixed(2)}`,40,y);
+        x.fillText(`${o.txt}: R$ ${valor.toFixed(2)}`,40,y);
         y+=30;
       });
-      x.fillStyle = "#ffcc00";
-      x.font = "bold 24px sans-serif";
-      const total = lista.reduce((s,o)=>{
+
+      const totalMes = lista.reduce((s,o)=>{
         const v = parseFloat(document.getElementById(o.id).value)||0;
         return s + (o.tipo==="dia" ? v*30 : o.tipo==="sem" ? v*4 : v);
       },0);
-      x.fillText(`Total mês: R$ ${total.toFixed(2)}`,40,360);
+      const totalAno = totalMes * 12;
+
+      x.fillStyle = "#ffcc00";
+      x.font = "bold 24px sans-serif";
+      x.fillText(`Total mês: R$ ${totalMes.toFixed(2)}`,40,400);
+      x.fillText(`Total ano: R$ ${totalAno.toFixed(2)}`,40,430);
+
       alert("Imagem gerada! Toque e segure para salvar e postar nos stories.");
     }
   </script>
